@@ -26,8 +26,8 @@
 //  //    }
 //}
 
-#define RELAY_ON 0
-#define RELAY_OFF 1
+#define RELAY_ON 0 // Relay LED off when relay on
+#define RELAY_OFF 1 // Relay LED on when relay off
 #define RELAY_1  2   // pin yang digunakan bisa diganti ganti bro
 
 int indikator = 12; // buat indikator LED

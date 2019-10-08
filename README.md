@@ -18,3 +18,4 @@ Program TA2
 1.  Sensor PIR HC-SR501  
 2.	Mikrokontroler NodeMCU
 3.	Relay
+4.  NodeMCU Base

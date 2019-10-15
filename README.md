@@ -14,6 +14,12 @@ Program TA2
 10.	Kabel listrik
 11.	Steker listrik
 
+# Aplikasi
+Pembuatan aplikasi pake MIT App Inventor
+
+# Database
+Pembuatan DB pake Firebase
+
 # Alat yang sementara dikerjakan:
 1.  Sensor PIR HC-SR501  
 2.	Mikrokontroler NodeMCU

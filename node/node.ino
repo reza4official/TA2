@@ -1,6 +1,5 @@
 #include <ESP8266WiFi.h>
 #include <FirebaseArduino.h>
-#include <string>
 
 #define FIREBASE_HOST "light-control-fe6f8.firebaseio.com"
 #define FIREBASE_AUTH "VrkBz0o2te1yZFSy7AaoHKMJcbtFLKsd832G0T9y"
@@ -8,10 +7,10 @@
 #define WIFI_PASSWORD "01454765"
 
 /** constant */
-const string nodeId = 'light-001';
-const int relayPin = 2; // pin for the RELAY
-const int pirPin = 13;  // input pin (for PIR sensor)
-const int baud = 9600;  // input baud
+String nodeId = "light-001";
+int relayPin = 2; // pin for the RELAY
+int pirPin = 13;  // input pin (for PIR sensor)
+int baud = 9600;  // input baud
 
 /** declare inputs */
 bool motionDetected;
@@ -19,7 +18,7 @@ bool sensorActive;
 bool isOverrided;
 
 /** log message to console */
-void log(string message)
+void log(String message)
 {
   Serial.println("-- " + message + " --");
 }
@@ -35,7 +34,7 @@ void firebaseConnect()
 void readNodeData()
 {
   sensorActive = Firebase.getBool("nodes/" + nodeId + "/active");
-  isOverrided = Firebase.getBool("nodes/" + nodeId + "/override");
+  isOverrided = Firebase.getBool("nodes/" + nodeId + "/bypass");
 }
 
 /** get sensor data */
@@ -43,7 +42,7 @@ void readSensorData()
 {
   int in = digitalRead(pirPin); // read from motion sensor
   motionDetected = in == 1 ? true : false;
-  log(motionDetected ? 'motion detected' : 'no motion detected')
+  log(motionDetected ? "motion detected" : "motion not detected");
 }
 
 /** switch light */
@@ -93,5 +92,5 @@ void loop()
   /** switch light on/off */
   toggleSwitch(isOverrided || (sensorActive && motionDetected));
 
-  delay(1000);
+  delay(250);
 }

@@ -8,9 +8,10 @@
 
 /** constant */
 String nodeId = "light-001";
-int relayPin = 2; // pin for the RELAY
-int pirPin = 13;  // input pin (for PIR sensor)
-int baud = 9600;  // input baud
+int relayPin = 2;    // pin for the RELAY
+int pirPin = 13;     // input pin (for PIR sensor)
+int baud = 9600;     // input baud
+int loopDelay = 250; // milisecond
 
 /** declare inputs */
 bool motionDetected;
@@ -85,12 +86,13 @@ void loop()
     return;
   }
 
-  /** get node data from firebase */
+  /** get node and sensor data */
   readNodeData();
   readSensorData();
 
   /** switch light on/off */
   toggleSwitch(isOverrided || (sensorActive && motionDetected));
 
-  delay(250);
+  delay(loopDelay);
+  return;
 }

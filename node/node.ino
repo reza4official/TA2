@@ -1,5 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <FirebaseArduino.h>
+#include <string>
 
 #define FIREBASE_HOST "light-control-fe6f8.firebaseio.com"
 #define FIREBASE_AUTH "VrkBz0o2te1yZFSy7AaoHKMJcbtFLKsd832G0T9y"
@@ -10,7 +11,7 @@
 const string nodeId = 'light-001';
 const int relayPin = 2; // pin for the RELAY
 const int pirPin = 13;  // input pin (for PIR sensor)
-const int port = 9600;  // input port
+const int baud = 9600;  // input baud
 
 /** declare inputs */
 bool motionDetected;
@@ -59,8 +60,8 @@ void setup()
   pinMode(pirPin, INPUT);    // declare pirPin as input
   digitalWrite(relayPin, 0);
 
-  Serial.begin(port);
-  Serial.print("connecting to port " + port);
+  Serial.begin(baud);
+  Serial.print("connecting to baud " + baud);
 
   /** wait until connected to wifi */
   while (WiFi.status() != WL_CONNECTED)
@@ -89,6 +90,7 @@ void loop()
   readNodeData();
   readSensorData();
 
+  /** switch light on/off */
   toggleSwitch(isOverrided || (sensorActive && motionDetected));
 
   delay(1000);

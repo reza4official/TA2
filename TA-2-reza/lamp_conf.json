@@ -1,0 +1,73 @@
+{
+  "sensor1": {
+    "isRoot": true,
+    "neighbor": [
+      "sensor2",
+      "sensor3"
+    ],
+    "other": [
+      "sensor4",
+      "sensor5",
+      "sensor6"
+    ]
+  },
+  "sensor2": {
+    "isRoot": false,
+    "neighbor": [
+      "sensor1",
+      "sensor3",
+      "sensor4",
+      "sensor5",
+      "sensor6"
+    ],
+    "other": []
+  },
+  "sensor3": {
+    "isRoot": false,
+    "neighbor": [
+      "sensor1",
+      "sensor2"
+    ],
+    "other": [
+      "sensor4",
+      "sensor5",
+      "sensor6"
+    ]
+  },
+  "sensor4": {
+    "isRoot": false,
+    "neighbor": [
+      "sensor2",
+      "sensor5",
+      "sensor6"
+    ],
+    "other": [
+      "sensor1",
+      "sensor3"
+    ]
+  },
+  "sensor5": {
+    "isRoot": false,
+    "neighbor": [
+      "sensor2",
+      "sensor4",
+      "sensor6"
+    ],
+    "other": [
+      "sensor1",
+      "sensor3"
+    ]
+  },
+  "sensor6": {
+    "isRoot": false,
+    "neighbor": [
+      "sensor2",
+      "sensor4",
+      "sensor5"
+    ],
+    "other": [
+      "sensor1",
+      "sensor3"
+    ]
+  }
+}

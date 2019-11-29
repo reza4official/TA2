@@ -27,3 +27,10 @@ Pembuatan DB pake Firebase
 2.	Mikrokontroler NodeMCU
 3.	Relay
 4.  NodeMCU Base
+
+# Logic
+1. Ketika terdeteksi gerakan pada satu sensor, maka sensor di sebelahnya set on, selain itu set off
+2. Jika sensor = root maka abaikan perintah sensor lain
+3. Ketika ada lampu di tetangga sedang on maka nyalakan sensor
+4. Ketika masih mendeteksi orang di sensor maka device mengabaikan perintah
+5. Jika mode manual bukan -1 maka set lampu sesuai user command

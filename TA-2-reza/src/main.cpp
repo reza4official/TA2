@@ -1,23 +1,39 @@
 #include <Arduino.h>
 #include <Reader.h>
 #include <Firebase.h>
-#include <Actuator.h>
+// #include <Actuator.h>
 
-#define sensorId "sensor1"
-#define sensorPin 13
-#define relayPin 2
+/** CONFIG VARIABLE*/
+const int baudRate = 9600;
+const char *sensorId = "sensor1";
+const int sensorPin = 13;
+const int relayPin = 2;
+const int lampOnDuration = 5; // in minute
 
 Firebase firebase(sensorId);
 Reader reader(sensorPin);
-Actuator actuator(sensorPin, relayPin);
+// Actuator actuator(sensorPin, relayPin, lampOnDuration);
 
-/** constant */
-int baudRate = 9600; // input baud rate hz
+ICACHE_RAM_ATTR void onMotionDetected()
+{
+  Serial.println("-----------");
+  Serial.println("terjadi pergerakan di " + String(sensorId));
+  firebase.setNeighborSensor();
+  Serial.println("-----------");
+}
+
+void onDataChange() {
+
+}
 
 /** initiate prerequisite */
 void setup()
 {
   Serial.begin(baudRate);
+  Serial.println("-----------");
+  Serial.println("after setup");
+  reader.setOnMotionDetected(onMotionDetected);
+  // firebase.setOnDataChange();
   // firebase.setupConnection(); // setup WiFi connection
   // reader.setupSensor();
 }
@@ -25,5 +41,6 @@ void setup()
 /** main loops */
 void loop()
 {
-  firebase.maintainConnection();
+  // firebase.maintainConnection();
+  delay(1000);
 }

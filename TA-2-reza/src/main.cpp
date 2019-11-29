@@ -3,9 +3,13 @@
 #include <Firebase.h>
 #include <Actuator.h>
 
-Firebase firebase;
-Reader reader;
-Actuator actuator;
+#define sensorId "sensor1"
+#define sensorPin 13
+#define relayPin 2
+
+Firebase firebase(sensorId);
+Reader reader(sensorPin);
+Actuator actuator(sensorPin, relayPin);
 
 /** constant */
 int baudRate = 9600; // input baud rate hz

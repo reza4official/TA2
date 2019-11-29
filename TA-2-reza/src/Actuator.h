@@ -5,9 +5,11 @@ private:
     int sensorPin;
     int lampOnDuration;
 
+    void runTurnOffTimer();
+
 public:
     Actuator(int sensorPin, int relayPin, int lampOnDuration);
 
-    void setLamp(bool status);
-    void setSensor(bool status);
+    void setLamp(bool isOn);
+    void setSensor(bool isOn);
 };

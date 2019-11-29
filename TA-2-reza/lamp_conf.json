@@ -4,11 +4,11 @@
     "isSensorOn": true,
     "isLampOn": false,
     "bypassMode": -1,
-    "neighbor": [
+    "neighbors": [
       "sensor2",
       "sensor3"
     ],
-    "other": [
+    "others": [
       "sensor4",
       "sensor5",
       "sensor6"
@@ -19,25 +19,25 @@
     "isSensorOn": false,
     "isLampOn": false,
     "bypassMode": -1,
-    "neighbor": [
+    "neighbors": [
       "sensor1",
       "sensor3",
       "sensor4",
       "sensor5",
       "sensor6"
     ],
-    "other": []
+    "others": []
   },
   "sensor3": {
     "isRoot": false,
     "isSensorOn": false,
     "isLampOn": false,
     "bypassMode": -1,
-    "neighbor": [
+    "neighbors": [
       "sensor1",
       "sensor2"
     ],
-    "other": [
+    "others": [
       "sensor4",
       "sensor5",
       "sensor6"
@@ -48,12 +48,12 @@
     "isSensorOn": false,
     "isLampOn": false,
     "bypassMode": -1,
-    "neighbor": [
+    "neighbors": [
       "sensor2",
       "sensor5",
       "sensor6"
     ],
-    "other": [
+    "others": [
       "sensor1",
       "sensor3"
     ]
@@ -63,12 +63,12 @@
     "isSensorOn": false,
     "isLampOn": false,
     "bypassMode": -1,
-    "neighbor": [
+    "neighbors": [
       "sensor2",
       "sensor4",
       "sensor6"
     ],
-    "other": [
+    "others": [
       "sensor1",
       "sensor3"
     ]
@@ -78,12 +78,12 @@
     "isSensorOn": false,
     "isLampOn": false,
     "bypassMode": -1,
-    "neighbor": [
+    "neighbors": [
       "sensor2",
       "sensor4",
       "sensor5"
     ],
-    "other": [
+    "others": [
       "sensor1",
       "sensor3"
     ]

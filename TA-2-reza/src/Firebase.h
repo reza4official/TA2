@@ -11,7 +11,7 @@ private:
     std::list<std::string> getOther();
 
 public:
-    Firebase();
+    Firebase(std::string id);
     /**
      * Mode: 
      * -1 = Auto

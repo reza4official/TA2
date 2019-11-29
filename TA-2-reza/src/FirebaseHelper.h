@@ -1,8 +1,10 @@
 #include <list>
 
-class Firebase
+class FirebaseHelper
 {
 private:
+    const char *ssid;
+    const char *password;
     std::string sensorId;
     std::list<std::string> neighbors;
     std::list<std::string> others;
@@ -11,7 +13,7 @@ private:
     std::list<std::string> getOther();
 
 public:
-    Firebase(std::string id);
+    FirebaseHelper(const char *ssid, const char *password, std::string sensorId);
     /**
      * Mode: 
      * -1 = Auto
@@ -27,5 +29,6 @@ public:
     void setIsSensorOn(bool isSensorOn); // to override value
     void setNeighborSensor();            // set other sensor status
 
+    void firebaseConnect();
     void maintainConnection(); // run this funtion on loop
 };

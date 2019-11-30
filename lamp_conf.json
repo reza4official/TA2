@@ -1,91 +1,103 @@
 {
-  "sensor1": {
-    "isRoot": true,
-    "isSensorOn": true,
-    "isLampOn": false,
-    "bypassMode": -1,
-    "neighbors": [
-      "sensor2",
-      "sensor3"
-    ],
-    "others": [
-      "sensor4",
-      "sensor5",
-      "sensor6"
-    ]
-  },
-  "sensor2": {
-    "isRoot": false,
-    "isSensorOn": false,
-    "isLampOn": false,
-    "bypassMode": -1,
-    "neighbors": [
-      "sensor1",
-      "sensor3",
-      "sensor4",
-      "sensor5",
-      "sensor6"
-    ],
-    "others": []
-  },
-  "sensor3": {
-    "isRoot": false,
-    "isSensorOn": false,
-    "isLampOn": false,
-    "bypassMode": -1,
-    "neighbors": [
-      "sensor1",
-      "sensor2"
-    ],
-    "others": [
-      "sensor4",
-      "sensor5",
-      "sensor6"
-    ]
-  },
-  "sensor4": {
-    "isRoot": false,
-    "isSensorOn": false,
-    "isLampOn": false,
-    "bypassMode": -1,
-    "neighbors": [
-      "sensor2",
-      "sensor5",
-      "sensor6"
-    ],
-    "others": [
-      "sensor1",
-      "sensor3"
-    ]
-  },
-  "sensor5": {
-    "isRoot": false,
-    "isSensorOn": false,
-    "isLampOn": false,
-    "bypassMode": -1,
-    "neighbors": [
-      "sensor2",
-      "sensor4",
-      "sensor6"
-    ],
-    "others": [
-      "sensor1",
-      "sensor3"
-    ]
-  },
-  "sensor6": {
-    "isRoot": false,
-    "isSensorOn": false,
-    "isLampOn": false,
-    "bypassMode": -1,
-    "neighbors": [
-      "sensor2",
-      "sensor4",
-      "sensor5"
-    ],
-    "others": [
-      "sensor1",
-      "sensor3"
-    ]
-  }
+    "sensor1": {
+        "isRoot": true,
+        "isSensorOn": true,
+        "isLampOn": false,
+        "bypassMode": -1,
+        "neighbors_count": 2,
+        "others_count": 3,
+        "neighbors": [
+            "sensor2",
+            "sensor3"
+        ],
+        "others": [
+            "sensor4",
+            "sensor5",
+            "sensor6"
+        ]
+    },
+    "sensor2": {
+        "isRoot": false,
+        "isSensorOn": false,
+        "isLampOn": false,
+        "bypassMode": -1,
+        "neighbors_count": 5,
+        "others_count": 0,
+        "neighbors": [
+            "sensor1",
+            "sensor3",
+            "sensor4",
+            "sensor5",
+            "sensor6"
+        ],
+        "others": []
+    },
+    "sensor3": {
+        "isRoot": false,
+        "isSensorOn": false,
+        "isLampOn": false,
+        "bypassMode": -1,
+        "neighbors_count": 2,
+        "others_count": 3,
+        "neighbors": [
+            "sensor1",
+            "sensor2"
+        ],
+        "others": [
+            "sensor4",
+            "sensor5",
+            "sensor6"
+        ]
+    },
+    "sensor4": {
+        "isRoot": false,
+        "isSensorOn": false,
+        "isLampOn": false,
+        "bypassMode": -1,
+        "neighbors_count": 2,
+        "others_count": 2,
+        "neighbors": [
+            "sensor2",
+            "sensor5",
+            "sensor6"
+        ],
+        "others": [
+            "sensor1",
+            "sensor3"
+        ]
+    },
+    "sensor5": {
+        "isRoot": false,
+        "isSensorOn": false,
+        "isLampOn": false,
+        "bypassMode": -1,
+        "neighbors_count": 3,
+        "others_count": 2,
+        "neighbors": [
+            "sensor2",
+            "sensor4",
+            "sensor6"
+        ],
+        "others": [
+            "sensor1",
+            "sensor3"
+        ]
+    },
+    "sensor6": {
+        "isRoot": false,
+        "isSensorOn": false,
+        "isLampOn": false,
+        "bypassMode": -1,
+        "neighbors_count": 3,
+        "others_count": 2,
+        "neighbors": [
+            "sensor2",
+            "sensor4",
+            "sensor5"
+        ],
+        "others": [
+            "sensor1",
+            "sensor3"
+        ]
+    }
 }

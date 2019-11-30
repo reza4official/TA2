@@ -5,21 +5,23 @@
 class FirebaseHelper
 {
 private:
-    const char *ssid;
-    const char *password;
-    std::string sensorId;
+    String ssid;
+    String password;
+    String sensorId;
     int firebaseFetchInterval;
-    std::list<std::string> neighbors;
-    std::list<std::string> others;
+    String neighbors[];
+    String others[];
+    int neighborsCount;
+    int otherCount;
     bool isReconnectingWifi;
     os_timer_t myTimer; // timer, software interrupt
 
-    std::list<std::string> getNeighbor();
-    std::list<std::string> getOther();
-    void queryNeighborLamp(); // read neighbor status then update `isNeighborLampOn` field
+    void fetchNeighborKey();
+    void fetchOtherKey();
+    bool queryNeighborLamp(); // read neighbor status then update `isNeighborLampOn` field
 
 public:
-    FirebaseHelper(const char *ssid, const char *password, std::string sensorId, int firebaseFetchInterval);
+    FirebaseHelper(String ssid, String password, String sensorId, int firebaseFetchInterval);
 
     /**
      * Mode: 
@@ -38,7 +40,7 @@ public:
     void setIsSensorOn(bool isSensorOn); // to override value
     void setNeighborSensors();           // set other sensor status
 
-    void firebaseConnect();
     void setupTimedCheckData(ETSTimerFunc *fn);
+    void firebaseConnect();
     void maintainConnection(); // run this funtion on loop
 };

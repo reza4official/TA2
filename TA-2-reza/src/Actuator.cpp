@@ -10,15 +10,18 @@ Actuator::Actuator(int sensorPin, int relayPin, int lampOnDuration)
 
 void Actuator::setLamp(bool isOn)
 {
+  Actuator::lastTimeOn = millis();
+  Actuator::isLampOn = isOn;
   digitalWrite(relayPin, isOn ? HIGH : LOW);
-  runTurnOffTimer();
 }
 
-void Actuator::runTurnOffTimer()
+void Actuator::runTimerLoop()
 {
-  // reset timer first then
-  // if timer goes off
-  setLamp(false);
+  long passedTime = (millis() - lastTimeOn) / (60 /*second*/ * 1000 /*miliis*/);
+  if (passedTime >= lampOnDuration)
+  {
+    setLamp(false);
+  }
 }
 
 void Actuator::setSensor(bool isOn)

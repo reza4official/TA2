@@ -45,6 +45,8 @@ void setup()
 /** main loops */
 void loop()
 {
+  actuator.runTimerLoop();
   // firebaseHelper.maintainConnection();
+
   delay(1000);
 }

@@ -1,5 +1,6 @@
 #include <ESP8266WiFi.h>
 
+typedef void (*statusFuncPtr)(bool);
 class Actuator
 {
 private:
@@ -10,6 +11,7 @@ private:
     long lastTimeOn;
     int checkInterval;
     os_timer_t myTimer; // timer, software interrupt
+    statusFuncPtr onLampEvent;
 
 public:
     Actuator(int sensorPin, int relayPin, int lampOnDuration, int checkInterval);
@@ -18,4 +20,5 @@ public:
     void setSensor(bool isOn);
     void runOffTimer();
     void setupTimedCheckLamp(ETSTimerFunc *fn);
+    void setOnLampEvent(statusFuncPtr onLampEvent);
 };

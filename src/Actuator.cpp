@@ -11,11 +11,17 @@ Actuator::Actuator(int sensorPin, int relayPin, int lampOnDuration, int checkInt
   Actuator::checkInterval = checkInterval;
 }
 
+void Actuator::setOnLampEvent(statusFuncPtr onLampEvent)
+{
+  Actuator::onLampEvent = onLampEvent;
+}
+
 void Actuator::setLamp(bool isOn)
 {
   Actuator::lastTimeOn = millis();
   Actuator::isLampOn = isOn;
   digitalWrite(relayPin, isOn ? HIGH : LOW);
+  onLampEvent(isOn);
 }
 
 void Actuator::runOffTimer()

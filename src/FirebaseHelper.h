@@ -31,6 +31,7 @@ public:
     bool isRoot;           // is current sensor a root (sensor is always on)
     bool isNeighborLampOn; // is other neighbor lamp turned on
     bool isSensorOn;       // is current sensor should be On
+    bool isLampOn;         // is current lamp is still on
 
     void fetchNodeData();                // readData from server
     void setIsLampOn(bool isLampOn);     // set status of current

@@ -41,9 +41,10 @@ void onFirebaseShouldFetch(void *timed)
   bool isRoot = firebaseHelper.isRoot;                     // is current sensor a root (sensor is always on)
   bool isNeighborLampOn = firebaseHelper.isNeighborLampOn; // is other neighbor lamp turned on
   bool isSensorOn = firebaseHelper.isSensorOn;             // is current sensor should be On
+  bool isLampOn = firebaseHelper.isLampOn;                 // is current lamp currently On
 
-  // root or isNeighborLampOn logic
-  if (isRoot || isNeighborLampOn)
+  // if root or isNeighborLampOn or isLampOn, override sensor activation
+  if (isRoot || isNeighborLampOn || isLampOn)
   {
     isSensorOn = true;
     firebaseHelper.setIsSensorOn(true);
@@ -69,6 +70,12 @@ void onLampCheck(void *timed)
   actuator.runOffTimer();
 }
 
+// set firebase status to isOn
+void onLampEvent(bool isOn)
+{
+  firebaseHelper.setIsLampOn(isOn);
+}
+
 /** initiate prerequisite */
 void setup()
 {
@@ -87,6 +94,8 @@ void setup()
   // actuator setups
   // to run automatic off timer
   actuator.setupTimedCheckLamp(onLampCheck);
+  // to set listener after lamp set
+  actuator.setOnLampEvent(onLampEvent);
 }
 
 /** main loops */

@@ -1,7 +1,7 @@
 # TA2
 Program TA2
 
-# Spesifikasi Alat:
+## Spesifikasi Alat:
 1.  Sensor PIR HC-SR501 
 ![Image](https://www.elektor.com/media/catalog/product/cache/2b4bee73c90e4689bbc4ca8391937af9/a/x/axirissensorc-web.jpg)
 2.	Mikrokontroler NodeMCU ESP8266 
@@ -16,13 +16,13 @@ Program TA2
 10.	Kabel listrik
 11.	Steker listrik
 
-# Aplikasi
+## Aplikasi
 Pembuatan aplikasi pake MIT App Inventor
 
-# Database
+## Database
 Pembuatan DB pake Firebase
 
-# Alat yang sementara dikerjakan:
+## Alat yang sementara dikerjakan:
 1.  Sensor PIR HC-SR501  
 2.	Mikrokontroler NodeMCU
 3.	Relay

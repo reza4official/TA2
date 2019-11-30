@@ -18,37 +18,51 @@ FirebaseHelper::FirebaseHelper(const String ssid, const String password, String 
 
 void FirebaseHelper::fetchNeighborKey()
 {
-    for (size_t i = 0; i < neighborsCount; i++)
+    for (int i = 0; i < neighborsCount; i++)
     {
-        /* code */
+        String neighborKey = Firebase.getString(ROOT + sensorId + "/neighbors" + i);
+        neighbors[i] = neighborKey;
     }
 }
 void FirebaseHelper::fetchOtherKey()
 {
-    for (size_t i = 0; i < otherCount; i++)
+    for (int i = 0; i < otherCount; i++)
     {
-        /* code */
+        String otherKey = Firebase.getString(ROOT + sensorId + "/others" + i);
+        others[i] = otherKey;
     }
 }
 
 bool FirebaseHelper::queryNeighborLamp()
 {
+    for (int i = 0; i < neighborsCount; i++)
+    {
+        String neighborKey = neighbors[i];
+        bool isNeighborLampOn = Firebase.getBool(ROOT + neighborKey + "/isLampOn");
+        if (isNeighborLampOn)
+        {
+            return true;
+        }
+    }
+
     return false;
 }
 
 /** get node state from firebase */
 void FirebaseHelper::fetchNodeData()
 {
-    int neighborsCount = Firebase.getInt(ROOT + sensorId + "/neighbors_count");
+    // neighbor info
+    neighborsCount = Firebase.getInt(ROOT + sensorId + "/neighbors_count");
     fetchNeighborKey();
-    int otherCount = Firebase.getInt(ROOT + sensorId + "/others_count");
+    otherCount = Firebase.getInt(ROOT + sensorId + "/others_count");
     fetchOtherKey();
+    isNeighborLampOn = queryNeighborLamp();
 
-    int bypassMode = Firebase.getInt(ROOT + sensorId + "/bypassMode");
-    bool isRoot = Firebase.getBool(ROOT + sensorId + "/isRoot");
-    bool isSensorOn = Firebase.getBool(ROOT + sensorId + "/isSensorOn");
-    bool isLampOn = Firebase.getBool(ROOT + sensorId + "/isLampOn");
-    bool isNeighborLampOn = queryNeighborLamp();
+    // current node info
+    bypassMode = Firebase.getInt(ROOT + sensorId + "/bypassMode");
+    isRoot = Firebase.getBool(ROOT + sensorId + "/isRoot");
+    isSensorOn = Firebase.getBool(ROOT + sensorId + "/isSensorOn");
+    isLampOn = Firebase.getBool(ROOT + sensorId + "/isLampOn");
 }
 
 void FirebaseHelper::setIsLampOn(bool isLampOn)
@@ -63,7 +77,16 @@ void FirebaseHelper::setIsSensorOn(bool isSensorOn)
 
 void FirebaseHelper::setNeighborSensors()
 {
-    return;
+    for (int i = 0; i < neighborsCount; i++)
+    {
+        String neighborKey = neighbors[i];
+        Firebase.setBool(ROOT + neighborKey + "/isSensorOn", true);
+    }
+    for (int i = 0; i < otherCount; i++)
+    {
+        String otherKey = others[i];
+        Firebase.setBool(ROOT + otherKey + "/isSensorOn", false);
+    }
 }
 
 void FirebaseHelper::setupTimedCheckData(ETSTimerFunc *fn)

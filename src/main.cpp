@@ -3,7 +3,10 @@
 #include <FirebaseHelper.h>
 #include <Actuator.h>
 
-/** CONFIG VARIABLE*/
+/** 
+ * CONFIG VARIABLE
+ * To update maximum sensor count, change it on FirebaeHelper.h
+ */
 const char *ssid = "Razer WiFi";
 const char *password = "01454765";
 const int baudRate = 9600;

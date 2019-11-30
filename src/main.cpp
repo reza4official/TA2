@@ -10,22 +10,63 @@ const int baudRate = 9600;
 const char *sensorId = "sensor1";
 const int sensorPin = 13;
 const int relayPin = 2;
-const int lampOnDuration = 5; // in minute
+const int lampOnDuration = 5;        // in minute
+const int firebaseFetchInterval = 5; // in second
+const int lampUpdateInterval = 5;    // in second
+/// end of config
 
-// FirebaseHelper firebaseHelper(ssid, password, sensorId);
 Reader reader(sensorPin);
-Actuator actuator(sensorPin, relayPin, lampOnDuration);
+Actuator actuator(sensorPin, relayPin, lampOnDuration, lampUpdateInterval);
+FirebaseHelper firebaseHelper(ssid, password, sensorId, firebaseFetchInterval);
 
 ICACHE_RAM_ATTR void onMotionDetected()
 {
   Serial.println("-----------");
   Serial.println("terjadi pergerakan di " + String(sensorId));
-  // firebaseHelper.setNeighborSensor();
   Serial.println("-----------");
+
+  // then
+  firebaseHelper.setNeighborSensors();
+  actuator.setLamp(true);
 }
 
-void onDataChange()
+// update firebase data every 5
+void onFirebaseShouldFetch(void *timed)
 {
+  // when
+  firebaseHelper.fetchNodeData();
+
+  // then
+  int bypassMode = firebaseHelper.bypassMode;
+  bool isRoot = firebaseHelper.isRoot;                     // is current sensor a root (sensor is always on)
+  bool isNeighborLampOn = firebaseHelper.isNeighborLampOn; // is other neighbor lamp turned on
+  bool isSensorOn = firebaseHelper.isSensorOn;             // is current sensor should be On
+
+  // root or isNeighborLampOn logic
+  if (isRoot || isNeighborLampOn)
+  {
+    isSensorOn = true;
+    firebaseHelper.setIsSensorOn(true);
+  }
+
+  /* do things base on data */
+  actuator.setSensor(isSensorOn);
+
+  // bypass logic
+  if (bypassMode == 0)
+  {
+    actuator.setLamp(false);
+  }
+  else if (bypassMode == 1)
+  {
+    actuator.setLamp(true);
+  }
+}
+
+// check lamp in activity every 5, will turned off in 5 minute no activity
+void onLampCheck(void *timed)
+{
+  actuator.runOffTimer();
 }
 
 /** initiate prerequisite */
@@ -34,19 +75,24 @@ void setup()
   Serial.begin(baudRate);
   Serial.println("-----------");
   Serial.println("after setup");
-  // firebaseHelper.firebaseConnect();
-  // firebaseHelper.setupTimedCheckData();
+  Serial.println("-----------");
+
+  // firebase setups
+  firebaseHelper.firebaseConnect();
+  firebaseHelper.setupTimedCheckData(onFirebaseShouldFetch);
+
+  // reader setups
   reader.setOnMotionDetected(onMotionDetected);
-  // firebase.setOnDataChange();
-  // firebase.setupConnection(); // setup WiFi connection
-  // reader.setupSensor();
+
+  // actuator setups
+  // to run automatic off timer
+  actuator.setupTimedCheckLamp(onLampCheck);
 }
 
 /** main loops */
 void loop()
 {
-  actuator.runTimerLoop();
-  // firebaseHelper.maintainConnection();
-
-  delay(1000);
+  // check connection and try to reconnect if disconnected
+  firebaseHelper.maintainConnection();
+  delay(500);
 }

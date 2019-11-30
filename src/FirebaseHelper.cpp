@@ -1,5 +1,4 @@
-// #include <Arduino.h>
-// #include <ESP8266WiFi.h>
+#include <Arduino.h>
 #include <ESP8266HTTPClient.h>
 #include <FirebaseArduino.h>
 #include <FirebaseHelper.h>
@@ -7,11 +6,12 @@
 #define FIREBASE_HOST "light-control-fe6f8.firebaseio.com"
 #define FIREBASE_AUTH "VrkBz0o2te1yZFSy7AaoHKMJcbtFLKsd832G0T9y"
 
-FirebaseHelper::FirebaseHelper(const char *ssid, const char *password, std::string sensorId)
+FirebaseHelper::FirebaseHelper(const char *ssid, const char *password, std::string sensorId, int firebaseFetchInterval)
 {
     FirebaseHelper::ssid = ssid;
     FirebaseHelper::password = password;
     FirebaseHelper::sensorId = sensorId;
+    FirebaseHelper::firebaseFetchInterval = firebaseFetchInterval;
     isReconnectingWifi = true;
 }
 
@@ -24,31 +24,19 @@ FirebaseHelper::FirebaseHelper(const char *ssid, const char *password, std::stri
 //     return nullptr;
 // }
 
-int FirebaseHelper::getBypassMode()
+void FirebaseHelper::queryNeighborLamp()
 {
-    return 1;
-}
-bool FirebaseHelper::isRoot()
-{
-    return false;
-}
-
-bool FirebaseHelper::isNeighborLampOn()
-{
-    return false;
-}
-bool FirebaseHelper::isSensorOn()
-{
-    return false;
+    return;
 }
 
 /** get node state from firebase */
-// void readNodeData(void *pArg)
-// {
-//     // sensorActive = Firebase.getBool("nodes/" + nodeId + "/active");
-//     // isOverrided = Firebase.getBool("nodes/" + nodeId + "/bypass");
-//     return;
-// }
+void FirebaseHelper::fetchNodeData()
+{
+    return;
+    // sensorActive = Firebase.getBool("nodes/" + nodeId + "/active");
+    // isOverrided = Firebase.getBool("nodes/" + nodeId + "/bypass");
+    // return;
+}
 
 void FirebaseHelper::setIsLampOn(bool isLampOn)
 {
@@ -60,14 +48,15 @@ void FirebaseHelper::setIsSensorOn(bool isSensorOn)
     return;
 }
 
-void FirebaseHelper::setNeighborSensor()
+void FirebaseHelper::setNeighborSensors()
 {
+    return;
 }
 
-void FirebaseHelper::setupTimedCheckData()
+void FirebaseHelper::setupTimedCheckData(ETSTimerFunc *fn)
 {
-    os_timer_setfn(&myTimer, readNodeData, NULL);         // set interrupt callback
-    os_timer_arm(&myTimer, 10 /*s*/ * 1000 /*ms*/, true); // setup timer, sample every 5 ms, 200Hz
+    os_timer_setfn(&myTimer, fn, NULL);                                      // set interrupt callback
+    os_timer_arm(&myTimer, firebaseFetchInterval /*s*/ * 1000 /*ms*/, true); // setup timer, sample every 5s
 }
 
 void FirebaseHelper::firebaseConnect()

@@ -12,14 +12,15 @@ const char *password = "01454765";
 const int baudRate = 9600;
 const char *sensorId = "sensor1";
 const int sensorPin = 13;
-const int relayPin = 2;
+const int sensorRelayPin = 12;
+const int lampRelayPin = 2;
 const int lampOnDuration = 5;        // in minute
 const int firebaseFetchInterval = 5; // in second
 const int lampUpdateInterval = 5;    // in second
 /// end of config
 
 Reader reader(sensorPin);
-Actuator actuator(sensorPin, relayPin, lampOnDuration, lampUpdateInterval);
+Actuator actuator(sensorRelayPin, lampRelayPin, lampOnDuration, lampUpdateInterval);
 FirebaseHelper firebaseHelper(ssid, password, sensorId, firebaseFetchInterval);
 
 ICACHE_RAM_ATTR void onMotionDetected()

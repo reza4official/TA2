@@ -4,7 +4,7 @@ typedef void (*statusFuncPtr)(bool);
 class Actuator
 {
 private:
-    int relayPin;
+    int lampPin;
     int sensorPin;
     int lampOnDuration;
     bool isLampOn;
@@ -14,7 +14,7 @@ private:
     statusFuncPtr onLampEvent;
 
 public:
-    Actuator(int sensorPin, int relayPin, int lampOnDuration, int checkInterval);
+    Actuator(int sensorPin, int lampPin, int lampOnDuration, int checkInterval);
 
     void setLamp(bool isOn);
     void setSensor(bool isOn);

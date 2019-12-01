@@ -3,12 +3,14 @@
 #include <ESP8266HTTPClient.h>
 #include <FirebaseArduino.h>
 
-Actuator::Actuator(int sensorPin, int relayPin, int lampOnDuration, int checkInterval)
+Actuator::Actuator(int sensorPin, int lampPin, int lampOnDuration, int checkInterval)
 {
   Actuator::sensorPin = sensorPin;
-  Actuator::relayPin = relayPin;
+  Actuator::lampPin = lampPin;
   Actuator::lampOnDuration = lampOnDuration;
   Actuator::checkInterval = checkInterval;
+  pinMode(Actuator::lampPin, OUTPUT);
+  pinMode(Actuator::sensorPin, OUTPUT);
 }
 
 void Actuator::setOnLampEvent(statusFuncPtr onLampEvent)
@@ -20,7 +22,7 @@ void Actuator::setLamp(bool isOn)
 {
   Actuator::lastTimeOn = millis();
   Actuator::isLampOn = isOn;
-  digitalWrite(relayPin, isOn ? HIGH : LOW);
+  digitalWrite(lampPin, isOn ? HIGH : LOW);
   onLampEvent(isOn);
 }
 

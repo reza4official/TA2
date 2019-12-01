@@ -2,8 +2,6 @@
 #include <ESP8266WiFi.h>
 #include <list>
 
-#define MAXIMUM_SENSOR_COUNT 10
-
 class FirebaseHelper
 {
 private:
@@ -11,13 +9,11 @@ private:
     String password;
     String sensorId;
     int firebaseFetchInterval;
-    String neighbors[MAXIMUM_SENSOR_COUNT];
-    String others[MAXIMUM_SENSOR_COUNT];
     int neighborsCount = 0;
     int otherCount = 0;
     bool isReconnectingWifi;
     os_timer_t myTimer; // timer, software interrupt
-    
+
     bool queryNeighborLamp(); // read neighbor status then update `isNeighborLampOn` field
 
 public:

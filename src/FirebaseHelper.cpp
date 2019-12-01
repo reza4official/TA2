@@ -20,7 +20,7 @@ void FirebaseHelper::fetchNeighborKey()
 {
     for (int i = 0; i < neighborsCount; i++)
     {
-        String neighborKey = Firebase.getString(ROOT + sensorId + "/neighbors" + i);
+        String neighborKey = Firebase.getString(ROOT + sensorId + "/neighbors/" + i);
         neighbors[i] = neighborKey;
     }
 }
@@ -28,7 +28,7 @@ void FirebaseHelper::fetchOtherKey()
 {
     for (int i = 0; i < otherCount; i++)
     {
-        String otherKey = Firebase.getString(ROOT + sensorId + "/others" + i);
+        String otherKey = Firebase.getString(ROOT + sensorId + "/others/" + i);
         others[i] = otherKey;
     }
 }

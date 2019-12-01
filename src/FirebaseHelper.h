@@ -11,7 +11,6 @@ private:
     int firebaseFetchInterval;
     int neighborsCount = 0;
     int otherCount = 0;
-    bool isReconnectingWifi;
     os_timer_t myTimer; // timer, software interrupt
 
     bool queryNeighborLamp(); // read neighbor status then update `isNeighborLampOn` field

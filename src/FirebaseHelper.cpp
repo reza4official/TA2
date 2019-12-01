@@ -13,7 +13,6 @@ FirebaseHelper::FirebaseHelper(const String ssid, const String password, String 
     FirebaseHelper::password = password;
     FirebaseHelper::sensorId = sensorId;
     FirebaseHelper::firebaseFetchInterval = firebaseFetchInterval;
-    isReconnectingWifi = true;
 }
 
 bool FirebaseHelper::queryNeighborLamp()
@@ -89,7 +88,6 @@ void FirebaseHelper::firebaseConnect()
     Serial.println("connecting to firebase");
     Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
     Serial.println("connected to firebase");
-    isReconnectingWifi = false;
 }
 
 void FirebaseHelper::maintainConnection()
@@ -97,7 +95,6 @@ void FirebaseHelper::maintainConnection()
     if (WiFi.status() != WL_CONNECTED || Firebase.failed())
     {
         Serial.println("Disconnected: Re-Try on 3s");
-        isReconnectingWifi = true;
         firebaseConnect();
         delay(3 /*second*/ * 1000 /*ms*/); // reconnecting after waiting 3 s
     }

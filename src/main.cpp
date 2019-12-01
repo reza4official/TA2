@@ -67,7 +67,7 @@ void onFirebaseShouldFetch(void *timed)
   }
 }
 
-// check lamp in activity every 5, will turned off in 5 minute no activity
+// check lamp inactivity every 5s, will turned off in 5 minute no activity
 void onLampCheck(void *timed)
 {
   actuator.runOffTimer();

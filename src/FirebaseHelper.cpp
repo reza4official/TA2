@@ -20,7 +20,7 @@ bool FirebaseHelper::queryNeighborLamp()
 {
     for (int i = 0; i < neighborsCount; i++)
     {
-        String neighborKey = neighbors[i];
+        String neighborKey = Firebase.getString(ROOT + sensorId + "/neighbors/" + i);
         bool isNeighborLampOn = Firebase.getBool(ROOT + neighborKey + "/isLampOn");
         if (isNeighborLampOn)
         {

@@ -16,23 +16,6 @@ FirebaseHelper::FirebaseHelper(const String ssid, const String password, String 
     isReconnectingWifi = true;
 }
 
-void FirebaseHelper::fetchNeighborKey()
-{
-    for (int i = 0; i < neighborsCount; i++)
-    {
-        String neighborKey = Firebase.getString(ROOT + sensorId + "/neighbors/" + i);
-        neighbors[i] = neighborKey;
-    }
-}
-void FirebaseHelper::fetchOtherKey()
-{
-    for (int i = 0; i < otherCount; i++)
-    {
-        String otherKey = Firebase.getString(ROOT + sensorId + "/others/" + i);
-        others[i] = otherKey;
-    }
-}
-
 bool FirebaseHelper::queryNeighborLamp()
 {
     for (int i = 0; i < neighborsCount; i++)
@@ -53,9 +36,7 @@ void FirebaseHelper::fetchNodeData()
 {
     // neighbor info
     neighborsCount = Firebase.getInt(ROOT + sensorId + "/neighbors_count");
-    fetchNeighborKey();
     otherCount = Firebase.getInt(ROOT + sensorId + "/others_count");
-    fetchOtherKey();
     isNeighborLampOn = queryNeighborLamp();
 
     // current node info
@@ -79,12 +60,12 @@ void FirebaseHelper::setNeighborSensors()
 {
     for (int i = 0; i < neighborsCount; i++)
     {
-        String neighborKey = neighbors[i];
+        String neighborKey = Firebase.getString(ROOT + sensorId + "/neighbors/" + i);
         Firebase.setBool(ROOT + neighborKey + "/isSensorOn", true);
     }
     for (int i = 0; i < otherCount; i++)
     {
-        String otherKey = others[i];
+        String otherKey = Firebase.getString(ROOT + sensorId + "/others/" + i);
         Firebase.setBool(ROOT + otherKey + "/isSensorOn", false);
     }
 }

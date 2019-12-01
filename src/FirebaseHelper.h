@@ -17,9 +17,7 @@ private:
     int otherCount = 0;
     bool isReconnectingWifi;
     os_timer_t myTimer; // timer, software interrupt
-
-    void fetchNeighborKey();
-    void fetchOtherKey();
+    
     bool queryNeighborLamp(); // read neighbor status then update `isNeighborLampOn` field
 
 public:

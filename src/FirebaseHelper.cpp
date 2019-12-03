@@ -78,9 +78,9 @@ void FirebaseHelper::setupTimedCheckData(ETSTimerFunc *fn)
 void FirebaseHelper::firebaseConnect()
 {
     Serial.print("connecting to WIFI");
+    WiFi.begin(FirebaseHelper::ssid, FirebaseHelper::password); // Begin WiFi connection
     while (WiFi.status() != WL_CONNECTED)
     {
-        WiFi.begin(FirebaseHelper::ssid, FirebaseHelper::password); // Begin WiFi connection
         Serial.print(".");
         delay(500);
     }

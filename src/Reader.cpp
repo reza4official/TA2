@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <Reader.h>
+#include <ESP8266WiFi.h>
 
 Reader::Reader(int sensorPin)
 {
@@ -12,7 +13,13 @@ void Reader::setSensor(bool isOn)
     digitalWrite(sensorPin, isOn ? HIGH : LOW);
 }
 
-void Reader::setOnMotionDetected(voidFuncPtr onMotionDetected)
+void Reader::setOnMotionDetected(ETSTimerFunc *fn)
 {
-    attachInterrupt(digitalPinToInterrupt(sensorPin), onMotionDetected, RISING);
+    os_timer_setfn(&myTimer, fn, NULL);                                      // set interrupt callback
+    os_timer_arm(&myTimer, SensorFetchInterval /*s*/ * 1000 /*ms*/, true); // setup timer, sample every 5s
 }
+
+// void Reader::setOnMotionDetected(voidFuncPtr onMotionDetected)
+// {
+//     attachInterrupt(digitalPinToInterrupt(sensorPin), onMotionDetected, RISING);
+// }

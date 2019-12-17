@@ -107,7 +107,7 @@ void setup()
   firebaseHelper.firebaseConnect();
   firebaseHelper.setupTimedCheckData(onFirebaseShouldFetch);
 
-  reader.setOnMotionDetected(onSensorShouldFetch);
+  reader.setupTimedCheckSensor(onSensorShouldFetch);
 
   // reader setups
   //reader.setOnMotionDetected(onMotionDetected);

@@ -12,9 +12,9 @@ private:
     os_timer_t myTimer; // timer, software interrupt
 
 public:
-    Reader(int sensorPin);
-    Reader(int SensorFetchInterval);
+    Reader(int sensorPin, int SensorFetchInterval);
 
     void setSensor(bool isOn);
-    void setOnMotionDetected(ETSTimerFunc *fn);
+    void setupTimedCheckSensor(ETSTimerFunc *fn);
+    // void setOnMotionDetected();
 };

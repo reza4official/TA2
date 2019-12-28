@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <ESP8266HTTPClient.h>
 #include <FirebaseArduino.h>
-#include <ESP8266WiFi.h>
 #include <FirebaseHelper.h>
 
 #define FIREBASE_HOST "light-control-fe6f8.firebaseio.com"
@@ -40,7 +39,7 @@ void FirebaseHelper::fetchNodeData()
     isNeighborLampOn = queryNeighborLamp();
 
     // current node info
-    bypassMode = Firebase.getInt(ROOT + sensorId + "/bypassMode");
+    bypassMode = Firebase.getString(ROOT + sensorId + "/bypassMode").toInt();
     isRoot = Firebase.getBool(ROOT + sensorId + "/isRoot");
     isSensorOn = Firebase.getBool(ROOT + sensorId + "/isSensorOn");
     isLampOn = Firebase.getBool(ROOT + sensorId + "/isLampOn");
@@ -49,29 +48,53 @@ void FirebaseHelper::fetchNodeData()
 void FirebaseHelper::setIsLampOn(bool isLampOn)
 {
     Firebase.setBool(ROOT + sensorId + "/isLampOn", isLampOn);
+    // if (Firebase.failed())
+    // { 
+    //     Serial.print("setting /isLampOn failed:"); 
+    //     Serial.println(Firebase.error());   
+    //     return;
+    // }
+    // delay(1000);
 }
 
 void FirebaseHelper::setIsSensorOn(bool isSensorOn)
 {
     Firebase.setBool(ROOT + sensorId + "/isSensorOn", isSensorOn);
+    // if (Firebase.failed())
+    // { 
+    //     Serial.print("setting /isSensorOn failed:"); 
+    //     Serial.println(Firebase.error());   
+    //     return;
+    // }
+    // delay(1000);
 }
 
 void FirebaseHelper::setNeighborSensors()
 {
-    Serial.println("Set Neighbor A");
-    String neighborKey, otherKey;
     for (int i = 0; i < neighborsCount; i++)
     {
-        neighborKey = Firebase.getString(ROOT + sensorId + "/neighbors/" + i);
+        String neighborKey = Firebase.getString(ROOT + sensorId + "/neighbors/" + i);
         Firebase.setBool(ROOT + neighborKey + "/isSensorOn", true);
+        // if (Firebase.failed())
+        // { 
+        //     Serial.print("setting /isSensorOn failed:"); 
+        //     Serial.println(Firebase.error());   
+        //     return;
+        // }
+        // delay(1000);
     }
-    Serial.println(  neighborKey);
     for (int i = 0; i < otherCount; i++)
     {
-        otherKey = Firebase.getString(ROOT + sensorId + "/others/" + i);
+        String otherKey = Firebase.getString(ROOT + sensorId + "/others/" + i);
         Firebase.setBool(ROOT + otherKey + "/isSensorOn", false);
+        // if (Firebase.failed())
+        // { 
+        //     Serial.print("setting /isSensorOn failed:"); 
+        //     Serial.println(Firebase.error());   
+        //     return;
+        // }
+        // delay(1000);
     }
-    Serial.println(otherKey);
 }
 
 void FirebaseHelper::setupTimedCheckData(ETSTimerFunc *fn)
@@ -79,6 +102,7 @@ void FirebaseHelper::setupTimedCheckData(ETSTimerFunc *fn)
     os_timer_setfn(&myTimer, fn, NULL);                                      // set interrupt callback
     os_timer_arm(&myTimer, firebaseFetchInterval /*s*/ * 1000 /*ms*/, true); // setup timer, sample every 5s
 }
+
 
 void FirebaseHelper::firebaseConnect()
 {
@@ -97,18 +121,12 @@ void FirebaseHelper::firebaseConnect()
 
 void FirebaseHelper::maintainConnection()
 {
-    if (WiFi.status() != WL_CONNECTED)
-    {
-        Serial.println("Disconnected: Re-Try on 3s");
-        firebaseConnect();
-        delay(3 /*second*/ * 1000 /*ms*/); // reconnecting after waiting 3 s
-    }
-    else if(!Firebase.failed())
+    if (WiFi.status() != WL_CONNECTED || Firebase.failed()) // || Firebase.failed())
     {
         Serial.println("Firebase Failed");
-        // Serial.println("connecting to firebase");
-        // Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-        // Serial.println("connected to firebase");
+        firebaseConnect();
+        delay(3 /*second*/ * 1000 /*ms*/); // reconnecting after waiting 3 s
+        return;
     }
     else
     {

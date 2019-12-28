@@ -6,34 +6,33 @@
 /** 
  * CONFIG VARIABLE
  */
-const char *ssid = "Samsung Galaxy Note10+";
-const char *password = "reza4official_";
+const char *ssid = "Razer WiFi";
+const char *password = "01454765";
 const int baudRate = 9600;
 const char *sensorId = "sensor1";
 const int sensorPin = 13;
 const int sensorRelayPin = 5;
 const int lampRelayPin = 2;
 const int lampOnDuration = 5;        // in minute
-const int firebaseFetchInterval = 10; // in second
-const int SensorFetchInterval = 5;  // in second
+const int firebaseFetchInterval = 5; // in second
 const int lampUpdateInterval = 5;    // in second
+
 /// end of config
 
-Reader reader(sensorPin, SensorFetchInterval);
+Reader reader(sensorPin); //, SensorFetchInterval);
 Actuator actuator(sensorRelayPin, lampRelayPin, lampOnDuration, lampUpdateInterval);
 FirebaseHelper firebaseHelper(ssid, password, sensorId, firebaseFetchInterval);
 
-// ICACHE_RAM_ATTR void onMotionDetected()
-// {
-//   Serial.println("-----------");
-//   Serial.println("terjadi pergerakan di " + String(sensorId));
-//   Serial.println("-----------");
+ICACHE_RAM_ATTR void onMotionDetected()
+{
+  Serial.println("-----------");
+  Serial.println("terjadi pergerakan di " + String(sensorId));
+  Serial.println("-----------");
 
-//   // then
-//   firebaseHelper.setNeighborSensors();
-//   actuator.setLamp(true);
-//   Serial.println("Gate Out Motion Detection");
-// }
+  // then
+  firebaseHelper.setNeighborSensors();
+  actuator.setLamp(true);
+}
 
 // update firebase data every 5
 void onFirebaseShouldFetch(void *timed)
@@ -69,20 +68,6 @@ void onFirebaseShouldFetch(void *timed)
   }
 }
 
-void onSensorShouldFetch(void *timed)
-{
-  if(digitalRead(sensorPin))
-  {
-    Serial.println("-----------");
-    Serial.println("terjadi pergerakan di " + String(sensorId));
-    Serial.println("-----------");
-
-    // then
-    firebaseHelper.setNeighborSensors();
-    actuator.setLamp(true);
-    Serial.println("Gate Out Motion Detection");
-  }
-}
 // check lamp inactivity every 5s, will turned off in 5 minute no activity
 void onLampCheck(void *timed)
 {
@@ -107,10 +92,8 @@ void setup()
   firebaseHelper.firebaseConnect();
   firebaseHelper.setupTimedCheckData(onFirebaseShouldFetch);
 
-  reader.setupTimedCheckSensor(onSensorShouldFetch);
-
   // reader setups
-  //reader.setOnMotionDetected(onMotionDetected);
+  reader.setOnMotionDetected(onMotionDetected);
 
   // actuator setups
   // to run automatic off timer
@@ -122,18 +105,7 @@ void setup()
 /** main loops */
 void loop()
 {
-  // if(digitalRead(sensorPin))
-  // {
-  //   Serial.println("-----------");
-  //   Serial.println("terjadi pergerakan di " + String(sensorId));
-  //   Serial.println("-----------");
-
-  //   // then
-  //   firebaseHelper.setNeighborSensors();
-  //   actuator.setLamp(true);
-  //   Serial.println("Gate Out Motion Detection");
-  // }
   // check connection and try to reconnect if disconnected
   firebaseHelper.maintainConnection();
-  //delay(500);
+  delay(500);
 }

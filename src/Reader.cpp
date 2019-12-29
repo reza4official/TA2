@@ -15,7 +15,7 @@ void Reader::setSensor(bool isOn)
 
 int Reader::readSensor()
 {
-    return digitalRead(sensorPin)
+    return digitalRead(sensorPin);
 }
 
 void Reader::setOnMotionDetected(voidFuncPtr onMotionDetected)

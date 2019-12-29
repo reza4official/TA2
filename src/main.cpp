@@ -6,8 +6,8 @@
 /** 
  * CONFIG VARIABLE
  */
-const char *ssid = "Razer WiFi";
-const char *password = "01454765";
+const char *ssid = "AAI";
+const char *password = "thenational";
 const int baudRate = 9600;
 const char *sensorId = "sensor1";
 const int sensorPin = 13;

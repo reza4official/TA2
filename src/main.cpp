@@ -95,9 +95,9 @@ void setup()
   // reader setups
   reader.setOnMotionDetected(onMotionDetected);
 
-  // actuator setups
-  // to run automatic off timer
+  // actuator setups, to run automatic off timer
   actuator.setupTimedCheckLamp(onLampCheck);
+
   // to set listener after lamp set
   actuator.setOnLampEvent(onLampEvent);
 }

@@ -49,9 +49,9 @@ void FirebaseHelper::setIsLampOn(bool isLampOn)
 {
     Firebase.setBool(ROOT + sensorId + "/isLampOn", isLampOn);
     // if (Firebase.failed())
-    // { 
-    //     Serial.print("setting /isLampOn failed:"); 
-    //     Serial.println(Firebase.error());   
+    // {
+    //     Serial.print("setting /isLampOn failed:");
+    //     Serial.println(Firebase.error());
     //     return;
     // }
     // delay(1000);
@@ -61,9 +61,9 @@ void FirebaseHelper::setIsSensorOn(bool isSensorOn)
 {
     Firebase.setBool(ROOT + sensorId + "/isSensorOn", isSensorOn);
     // if (Firebase.failed())
-    // { 
-    //     Serial.print("setting /isSensorOn failed:"); 
-    //     Serial.println(Firebase.error());   
+    // {
+    //     Serial.print("setting /isSensorOn failed:");
+    //     Serial.println(Firebase.error());
     //     return;
     // }
     // delay(1000);
@@ -76,9 +76,9 @@ void FirebaseHelper::setNeighborSensors()
         String neighborKey = Firebase.getString(ROOT + sensorId + "/neighbors/" + i);
         Firebase.setBool(ROOT + neighborKey + "/isSensorOn", true);
         // if (Firebase.failed())
-        // { 
-        //     Serial.print("setting /isSensorOn failed:"); 
-        //     Serial.println(Firebase.error());   
+        // {
+        //     Serial.print("setting /isSensorOn failed:");
+        //     Serial.println(Firebase.error());
         //     return;
         // }
         // delay(1000);
@@ -88,9 +88,9 @@ void FirebaseHelper::setNeighborSensors()
         String otherKey = Firebase.getString(ROOT + sensorId + "/others/" + i);
         Firebase.setBool(ROOT + otherKey + "/isSensorOn", false);
         // if (Firebase.failed())
-        // { 
-        //     Serial.print("setting /isSensorOn failed:"); 
-        //     Serial.println(Firebase.error());   
+        // {
+        //     Serial.print("setting /isSensorOn failed:");
+        //     Serial.println(Firebase.error());
         //     return;
         // }
         // delay(1000);
@@ -102,7 +102,6 @@ void FirebaseHelper::setupTimedCheckData(ETSTimerFunc *fn)
     os_timer_setfn(&myTimer, fn, NULL);                                      // set interrupt callback
     os_timer_arm(&myTimer, firebaseFetchInterval /*s*/ * 1000 /*ms*/, true); // setup timer, sample every 5s
 }
-
 
 void FirebaseHelper::firebaseConnect()
 {
@@ -123,13 +122,13 @@ void FirebaseHelper::maintainConnection()
 {
     if (WiFi.status() != WL_CONNECTED || Firebase.failed()) // || Firebase.failed())
     {
-        Serial.println("Firebase Failed");
+        Serial.println("Firebase connection failed, reconnecting...");
         firebaseConnect();
         delay(3 /*second*/ * 1000 /*ms*/); // reconnecting after waiting 3 s
         return;
     }
     else
     {
-        Serial.println("Still Connected...");
+        Serial.println("Still connected...");
     }
 }

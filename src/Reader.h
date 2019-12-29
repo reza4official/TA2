@@ -8,10 +8,11 @@ class Reader
 {
 private:
     int sensorPin;
-   
+
 public:
     Reader(int sensorPin);
 
     void setSensor(bool isOn);
+    int readSensor();
     void setOnMotionDetected(voidFuncPtr onMotionDetected);
 };

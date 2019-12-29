@@ -13,6 +13,11 @@ void Reader::setSensor(bool isOn)
     digitalWrite(sensorPin, isOn ? HIGH : LOW);
 }
 
+int Reader::readSensor()
+{
+    return digitalRead(sensorPin)
+}
+
 void Reader::setOnMotionDetected(voidFuncPtr onMotionDetected)
 {
     attachInterrupt(digitalPinToInterrupt(sensorPin), onMotionDetected, RISING);

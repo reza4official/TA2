@@ -37,6 +37,8 @@ ICACHE_RAM_ATTR void onMotionDetected()
 // update firebase data every 5
 void onFirebaseShouldFetch(void *timed)
 {
+  Serial.println("---INTERUP---");
+
   // when
   firebaseHelper.fetchNodeData();
 
@@ -60,12 +62,10 @@ void onFirebaseShouldFetch(void *timed)
   // bypass logic
   if (bypassMode == 0)
   {
-    Serial.println("Lampu mati");
     actuator.setLamp(false);
   }
   else if (bypassMode == 1)
   {
-    Serial.println("Lampu Hidup");
     actuator.setLamp(true);
   }
 }

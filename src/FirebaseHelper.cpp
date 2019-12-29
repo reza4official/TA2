@@ -105,7 +105,7 @@ void FirebaseHelper::setupTimedCheckData(ETSTimerFunc *fn)
 
 void FirebaseHelper::firebaseConnect()
 {
-    Serial.print("connecting to WIFI");
+    Serial.print("\nconnecting to WIFI");
     WiFi.begin(FirebaseHelper::ssid, FirebaseHelper::password); // Begin WiFi connection
     while (WiFi.status() != WL_CONNECTED)
     {
@@ -113,22 +113,22 @@ void FirebaseHelper::firebaseConnect()
         delay(500);
     }
 
-    Serial.println("connecting to firebase");
+    Serial.println("\nConnecting to firebase");
     Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-    Serial.println("connected to firebase");
+    Serial.println("\nConnected to firebase");
 }
 
 void FirebaseHelper::maintainConnection()
 {
     if (WiFi.status() != WL_CONNECTED || Firebase.failed()) // || Firebase.failed())
     {
-        Serial.println("Firebase connection failed, reconnecting...");
+        Serial.println("\nFirebase connection failed, reconnecting...");
         firebaseConnect();
         delay(3 /*second*/ * 1000 /*ms*/); // reconnecting after waiting 3 s
         return;
     }
     else
     {
-        Serial.println("Still connected...");
+        Serial.println("\nStill connected...");
     }
 }

@@ -44,8 +44,8 @@ void maintainConnection()
 /** get node state from firebase */
 void readNodeData()
 {
-  sensorActive = Firebase.getBool("nodes/" + nodeId + "/active");
-  isOverrided = Firebase.getBool("nodes/" + nodeId + "/bypass");
+  sensorActive = Firebase.getBool("v1/nodes/" + nodeId + "/status/sensor");
+  isOverrided = Firebase.getBool("v1/nodes/" + nodeId + "/status/override");
 }
 
 /** get sensor data */

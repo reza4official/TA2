@@ -1,113 +1,102 @@
-#include <Arduino.h>
-#include <Reader.h>
-#include <FirebaseHelper.h>
-#include <Actuator.h>
+#include <ESP8266WiFi.h>
+#include <FirebaseArduino.h>
 
-/** 
- * CONFIG VARIABLE
- */
-const char *ssid = "AAI";
-const char *password = "thenational";
-const int baudRate = 9600;
-const char *sensorId = "sensor1";
-const int sensorPin = 13;
-const int sensorRelayPin = 5;
-const int lampRelayPin = 2;
-const int lampOnDuration = 5;        // in minute
-const int firebaseFetchInterval = 5; // in second
-const int lampUpdateInterval = 5;    // in second
+#define FIREBASE_HOST "light-control-fe6f8.firebaseio.com"
+#define FIREBASE_AUTH "VrkBz0o2te1yZFSy7AaoHKMJcbtFLKsd832G0T9y"
+#define WIFI_SSID "Quiznos Indonesia"
+#define WIFI_PASSWORD "quiznoscafe"
 
-/// end of config
+/** constant */
+String nodeId = "light-001";
+int relayPin = 2; // pin for the RELAY
+int pirPin = 13;  // input pin (for PIR sensor)
+int baud = 9600;  // input baud
 
-Reader reader(sensorPin); //, SensorFetchInterval);
-Actuator actuator(sensorRelayPin, lampRelayPin, lampOnDuration, lampUpdateInterval);
-FirebaseHelper firebaseHelper(ssid, password, sensorId, firebaseFetchInterval);
+/** declare inputs */
+bool motionDetected;
+bool sensorActive;
+bool isOverrided;
 
-ICACHE_RAM_ATTR void onMotionDetected()
+/** log message to console */
+void log(String message)
 {
-  Serial.println("-----------");
-  Serial.println("terjadi pergerakan di " + String(sensorId));
-  Serial.println("-----------");
-
-  // then
-  firebaseHelper.setNeighborSensors();
-  actuator.setLamp(true);
+  Serial.println("-- " + message + " --");
 }
 
-// update firebase data every 5
-void onFirebaseShouldFetch(void *timed)
+/** established connection to firebase */
+void connect()
 {
-  Serial.println("---INTERUP---");
+  log("connecting to firebase");
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+}
 
-  // when
-  firebaseHelper.fetchNodeData();
-
-  // then
-  int bypassMode = firebaseHelper.bypassMode;
-  bool isRoot = firebaseHelper.isRoot;                     // is current sensor a root (sensor is always on)
-  bool isNeighborLampOn = firebaseHelper.isNeighborLampOn; // is other neighbor lamp turned on
-  bool isSensorOn = firebaseHelper.isSensorOn;             // is current sensor should be On
-  bool isLampOn = firebaseHelper.isLampOn;                 // is current lamp currently On
-
-  // if root or isNeighborLampOn or isLampOn, override sensor activation
-  if (isRoot || isNeighborLampOn || isLampOn)
+/** maintain firebase connection */
+void maintainConnection()
+{
+  if (Firebase.failed())
   {
-    isSensorOn = true;
-    firebaseHelper.setIsSensorOn(true);
-  }
-
-  /* do things base on data */
-  actuator.setSensor(isSensorOn);
-
-  // bypass logic
-  if (bypassMode == 0)
-  {
-    actuator.setLamp(false);
-  }
-  else if (bypassMode == 1)
-  {
-    actuator.setLamp(true);
+    log('firebase connection stalled');
+    connect();
+    return;
   }
 }
 
-// check lamp inactivity every 5s, will turned off in 5 minute no activity
-void onLampCheck(void *timed)
+/** get node state from firebase */
+void readNodeData()
 {
-  actuator.runOffTimer();
+  sensorActive = Firebase.getBool("nodes/" + nodeId + "/active");
+  isOverrided = Firebase.getBool("nodes/" + nodeId + "/bypass");
 }
 
-// set firebase status to isOn
-void onLampEvent(bool isOn)
+/** get sensor data */
+void readSensorData()
 {
-  firebaseHelper.setIsLampOn(isOn);
+  int in = digitalRead(pirPin); // read from motion sensor
+  motionDetected = in == 1 ? true : false;
+  log(motionDetected ? "motion detected" : "motion not detected");
+}
+
+/** switch light */
+void toggleSwitch(bool isOn)
+{
+  digitalWrite(relayPin, isOn ? HIGH : LOW);
 }
 
 /** initiate prerequisite */
 void setup()
 {
-  Serial.begin(baudRate);
-  Serial.println("-----------");
-  Serial.println("after setup");
-  Serial.println("-----------");
+  /** set I/O */
+  pinMode(relayPin, OUTPUT); // declare relayPin as output
+  pinMode(pirPin, INPUT);    // declare pirPin as input
+  digitalWrite(relayPin, 0);
 
-  // firebase setups
-  firebaseHelper.firebaseConnect();
-  firebaseHelper.setupTimedCheckData(onFirebaseShouldFetch);
+  Serial.begin(baud);
+  Serial.print("connecting to baud " + baud);
 
-  // reader setups
-  reader.setOnMotionDetected(onMotionDetected);
+  /** wait until connected to wifi */
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print("...");
+    delay(500);
+  }
+  Serial.print("connection established");
 
-  // actuator setups, to run automatic off timer
-  actuator.setupTimedCheckLamp(onLampCheck);
-
-  // to set listener after lamp set
-  actuator.setOnLampEvent(onLampEvent);
+  /** start connection to firebase instance */
+  connect()
 }
 
 /** main loops */
 void loop()
 {
-  // check connection and try to reconnect if disconnected
-  firebaseHelper.maintainConnection();
-  delay(500);
+  /** check firebase connection */
+  maintainConnection();
+
+  /** get node data from firebase */
+  readNodeData();
+  readSensorData();
+
+  /** switch light on/off */
+  toggleSwitch(isOverrided || (sensorActive && motionDetected));
+
+  delay(100);
 }
